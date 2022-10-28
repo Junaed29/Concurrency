@@ -12,19 +12,25 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let group = DispatchGroup()
+        
         let queue_1 = DispatchQueue(label: "first")
-        queue_1.sync {
-            sleep(4)
+        queue_1.async(group: group) {
+            sleep(6)
             print("First queue exicuted")
         }
         
         let queue_2 = DispatchQueue(label: "second")
-        queue_2.sync {
+        queue_2.async(group: group) {
             sleep(4)
             print("Second queue exicuted")
         }
         
-        print("All Queue Exicuted")
+        group.notify(queue: DispatchQueue.main) {
+            print("All Queue Exicuted")
+            self.view.backgroundColor = .purple
+        }
+        
     }
 
     @IBAction func greenButtonPressed(_ sender: UIButton) {
@@ -37,7 +43,8 @@ class ViewController: UIViewController {
 //            }
 //        }
 
-
+        self.view.backgroundColor = sender.backgroundColor
+        
     }
 
     @IBAction func redButtonPressed(_ sender: UIButton) {
