@@ -15,13 +15,13 @@ class ViewController: UIViewController {
         let group = DispatchGroup()
         
         let queue_1 = DispatchQueue(label: "first")
-        queue_1.async(group: group) {
+        queue_1.async(group: group, qos: .userInteractive) {
             sleep(6)
             print("First queue exicuted")
         }
         
         let queue_2 = DispatchQueue(label: "second")
-        queue_2.async(group: group) {
+        queue_2.async(group: group, qos: .userInitiated) {
             sleep(4)
             print("Second queue exicuted")
         }
@@ -29,6 +29,17 @@ class ViewController: UIViewController {
         group.notify(queue: DispatchQueue.main) {
             print("All Queue Exicuted")
             self.view.backgroundColor = .purple
+        }
+        
+        //When we need low prioriti word in background
+        let backgroundQueue = DispatchQueue(label: "backgroundQueue", qos: .background)
+        
+        backgroundQueue.async {
+            print("This is the background task")
+        }
+        
+        backgroundQueue.async {
+            print("Another background task")
         }
         
     }
